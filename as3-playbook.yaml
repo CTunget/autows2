@@ -1,0 +1,25 @@
+- name: DEPLOY AS3
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    uri_method: POST
+
+  vars_files:
+    - /home/bit/Projects/creds/creds.yaml
+
+  tasks:
+
+    - name: Create a JIRA issue
+      uri:
+        #url: https://your.jira.example.com/rest/api/2/issue/
+        url: https://108.128.216.12/mgmt/shared/appsvcs/declare/
+        user: "{{bigip_user}}"
+        password: "{{bigip_pass}}"
+        method: "{{uri_method}}"
+        body: "{{ lookup('file','./as3-dec.json') }}"
+        force_basic_auth: yes
+        status_code: 200
+        body_format: json
+        validate_certs: no
